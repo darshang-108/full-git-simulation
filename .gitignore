@@ -1,0 +1,32 @@
+# ── Python ──────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual environments ───────────────────────────────────────
+venv/
+.env/
+env/
+
+# ── IDE / editor ───────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS artefacts ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Project runtime data ──────────────────────────────────────
+tasks.json
+
+# ── pytest / coverage ─────────────────────────────────────────
+.pytest_cache/
+htmlcov/
+.coverage

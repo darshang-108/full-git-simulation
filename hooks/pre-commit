@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Pre-commit hook — runs pytest before allowing a commit.
+# If any test fails the commit is aborted.
+#
+# Installation (from the repo root):
+#   cp hooks/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit        # Linux / macOS / Git Bash
+#
+# Or use the helper script:
+#   python setup_hooks.py
+
+echo "🔍 Running pre-commit checks..."
+
+# 1. Basic Python syntax check on staged .py files
+STAGED_PY=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
+if [ -n "$STAGED_PY" ]; then
+    echo "  ▸ Checking Python syntax..."
+    for f in $STAGED_PY; do
+        python -c "import py_compile; py_compile.compile('$f', doraise=True)" 2>&1
+        if [ $? -ne 0 ]; then
+            echo "❌ Syntax error in $f — commit aborted."
+            exit 1
+        fi
+    done
+    echo "  ✅ Syntax OK"
+fi
+
+# 2. Run pytest
+echo "  ▸ Running pytest..."
+python -m pytest -q
+if [ $? -ne 0 ]; then
+    echo "❌ Tests failed — commit aborted."
+    exit 1
+fi
+
+echo "✅ All checks passed — committing."
+exit 0
